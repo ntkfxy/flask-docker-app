@@ -1,28 +1,20 @@
-FROM jenkins/jenkins:lts
+# ใช้ Official Python image เป็น base image
+FROM python:3.13-slim
 
-USER root
-RUN apt-get update && \
-    apt-get install -y docker.io python3 python3-venv python3-pip git && \
-    rm -rf /var/lib/apt/lists/*
+# กำหนด Working Directory ภายใน Container
+WORKDIR /app
 
-# กลับไป Jenkins user
-USER jenkins
+# Copy ไฟล์ requirements.txt เข้าไปก่อน เพื่อใช้ cache layer ของ Docker
+COPY requirements.txt .
 
-# สร้าง workspace
-RUN mkdir -p /var/jenkins_home/workspace/flask-docker-app
-WORKDIR /var/jenkins_home/workspace/flask-docker-app
-
-# copy project
-COPY requirements.txt . 
-COPY . .
-
-# สร้าง virtualenv และติดตั้ง dependencies
-RUN python3 -m venv /opt/venv
-ENV PATH="/opt/venv/bin:$PATH"
+# ติดตั้ง Dependencies ที่ระบุไว้
 RUN pip install --no-cache-dir -r requirements.txt
 
-# expose ports
-EXPOSE 8080 50000 5000
+# Copy โค้ดทั้งหมดในโปรเจกต์เข้าไปใน container
+COPY . .
 
-# start Jenkins
-CMD ["/usr/bin/tini", "--", "/usr/local/bin/jenkins.sh"]
+# กำหนด Port ที่ Container จะทำงาน
+EXPOSE 5000
+
+# คำสั่งสำหรับรัน Flask Application
+CMD ["python", "app.py"]
