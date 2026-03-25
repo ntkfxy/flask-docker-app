@@ -1,8 +1,6 @@
 FROM jenkins/jenkins:jdk21
 
-
 USER root
-
 
 # Install Docker CLI and Node.js
 RUN apt-get update && \
@@ -15,7 +13,6 @@ RUN apt-get update && \
     apt-get install -y nodejs && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-
 
 # สร้าง entrypoint script เพื่อแก้สิทธิ์ docker socket ตอน runtime
 RUN echo '#!/bin/bash\n\
@@ -30,8 +27,6 @@ RUN echo '#!/bin/bash\n\
     exec /usr/bin/tini -- /usr/local/bin/jenkins.sh "$@"' > /usr/local/bin/entrypoint.sh && \
     chmod +x /usr/local/bin/entrypoint.sh
 
-
 USER jenkins
-
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

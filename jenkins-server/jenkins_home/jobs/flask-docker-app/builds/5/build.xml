@@ -37,10 +37,10 @@
       </causeBag>
     </hudson.model.CauseAction>
     <jenkins.metrics.impl.TimeInQueueAction plugin="metrics@4.2.37-494.v06f9a_939d33a_">
-      <queuingDurationMillis>3</queuingDurationMillis>
+      <queuingDurationMillis>2</queuingDurationMillis>
       <blockedDurationMillis>0</blockedDurationMillis>
       <buildableDurationMillis>0</buildableDurationMillis>
-      <waitingDurationMillis>1</waitingDurationMillis>
+      <waitingDurationMillis>0</waitingDurationMillis>
     </jenkins.metrics.impl.TimeInQueueAction>
     <com.cloudbees.plugins.credentials.builds.CredentialsParameterBinder plugin="credentials@1497.v6ea_e85a_ce970">
       <boundCredentials class="concurrent-hash-map"/>
@@ -51,7 +51,7 @@
           <string>refs/remotes/origin/main</string>
           <hudson.plugins.git.util.Build>
             <marked plugin="git-client@6.5.0">
-              <sha1>f91c7c0e98462aa81d15eb75be1e31efc5d9cdae</sha1>
+              <sha1>a991ed237875876bbc787b8985c105a5afbbce9a</sha1>
               <branches class="list">
                 <hudson.plugins.git.Branch>
                   <sha1 reference="../../../sha1"/>
@@ -60,7 +60,7 @@
               </branches>
             </marked>
             <revision reference="../marked"/>
-            <hudsonBuildNumber>4</hudsonBuildNumber>
+            <hudsonBuildNumber>5</hudsonBuildNumber>
           </hudson.plugins.git.util.Build>
         </entry>
       </buildsByBranchName>
@@ -82,7 +82,7 @@
       <libraries/>
     </org.jenkinsci.plugins.workflow.libs.LibrariesAction>
     <org.jenkinsci.plugins.pipeline.modeldefinition.actions.ExecutionModelAction plugin="pipeline-model-definition@2.2277.v00573e73ddf1">
-      <stagesUUID>5d7d23f1-3ec6-40bc-b129-53ddee790fd1</stagesUUID>
+      <stagesUUID>569b998d-d620-4aeb-844a-50c2c82a5d99</stagesUUID>
       <pipelineDefs>
         <org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTPipelineDef plugin="pipeline-model-api@2.2277.v00573e73ddf1">
           <stages>
@@ -490,7 +490,7 @@
                 </branches>
               </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTStage>
             </stages>
-            <uuid>5d7d23f1-3ec6-40bc-b129-53ddee790fd1</uuid>
+            <uuid>569b998d-d620-4aeb-844a-50c2c82a5d99</uuid>
           </stages>
           <postBuild>
             <conditions>
@@ -1101,7 +1101,7 @@
                 </branches>
               </org.jenkinsci.plugins.pipeline.modeldefinition.ast.ModelASTStage>
             </stages>
-            <uuid>72781d15-20cd-4fb0-a548-0c48d663c441</uuid>
+            <uuid>3b5838e0-848c-4458-a487-bcc3fa19319f</uuid>
           </stages>
           <postBuild>
             <conditions>
@@ -1312,38 +1312,24 @@
       <env class="tree-map">
         <entry>
           <string>IMAGE_TAG</string>
-          <string>dev-4</string>
+          <string>dev-5</string>
         </entry>
       </env>
     </org.jenkinsci.plugins.workflow.cps.EnvActionImpl>
     <org.jenkinsci.plugins.workflow.support.steps.input.InputAction plugin="pipeline-input-step@540.v14b_100d754dd">
-      <ids class="java.util.concurrent.CopyOnWriteArrayList"/>
+      <ids class="java.util.concurrent.CopyOnWriteArrayList">
+        <string>D9a2ab12645422f7824143b1393ae605</string>
+      </ids>
     </org.jenkinsci.plugins.workflow.support.steps.input.InputAction>
-    <jenkins.model.InterruptedBuildAction>
-      <causes>
-        <jenkins.model.CauseOfInterruption_-UserInterruption>
-          <user>ntk</user>
-        </jenkins.model.CauseOfInterruption_-UserInterruption>
-      </causes>
-    </jenkins.model.InterruptedBuildAction>
-    <jenkins.metrics.impl.SubTaskTimeInQueueAction plugin="metrics@4.2.37-494.v06f9a_939d33a_">
-      <queuingDurationMillis>21</queuingDurationMillis>
-      <blockedDurationMillis>0</blockedDurationMillis>
-      <buildableDurationMillis>17</buildableDurationMillis>
-      <waitingDurationMillis>2</waitingDurationMillis>
-      <executingDurationMillis>1041522</executingDurationMillis>
-      <workUnitCount>1</workUnitCount>
-    </jenkins.metrics.impl.SubTaskTimeInQueueAction>
   </actions>
-  <queueId>11</queueId>
-  <timestamp>1774421487678</timestamp>
-  <startTime>1774421487700</startTime>
-  <result>ABORTED</result>
-  <duration>1259705</duration>
+  <queueId>13</queueId>
+  <timestamp>1774422753465</timestamp>
+  <startTime>1774422753489</startTime>
+  <duration>0</duration>
   <charset>UTF-8</charset>
   <keepLog>false</keepLog>
   <execution class="org.jenkinsci.plugins.workflow.cps.CpsFlowExecution">
-    <result>ABORTED</result>
+    <result>SUCCESS</result>
     <script>// =================================================================
 // JENKINS PIPELINE: Flask Docker CI/CD
 // =================================================================
@@ -1593,31 +1579,32 @@ pipeline {
     }
 }</script>
     <loadedScripts class="linked-hash-map"/>
+    <persistedClean>true</persistedClean>
     <durabilityHint>MAX_SURVIVABILITY</durabilityHint>
     <timings class="map">
       <entry>
         <string>flowNode</string>
-        <long>1983014905</long>
+        <long>1139570594</long>
       </entry>
       <entry>
         <string>classLoad</string>
-        <long>5936370074</long>
+        <long>3107298004</long>
       </entry>
       <entry>
         <string>runQueue</string>
-        <long>21013432773</long>
+        <long>11596101714</long>
       </entry>
       <entry>
         <string>run</string>
-        <long>11647749948</long>
+        <long>6555266955</long>
       </entry>
       <entry>
         <string>parse</string>
-        <long>4174158018</long>
+        <long>395945210</long>
       </entry>
       <entry>
         <string>saveProgram</string>
-        <long>6876093379</long>
+        <long>4000212521</long>
       </entry>
     </timings>
     <internalCalls class="sorted-set">
@@ -1626,17 +1613,16 @@ pipeline {
       <string>hudson.plugins.git.GitSCM.branches</string>
       <string>org.jenkinsci.plugins.docker.commons.credentials.DockerRegistryEndpoint.&lt;init&gt;</string>
       <string>org.jenkinsci.plugins.docker.commons.credentials.DockerRegistryEndpoint.imageName</string>
-      <string>org.jenkinsci.plugins.pipeline.StageStatus.TAG_NAME</string>
       <string>org.jenkinsci.plugins.workflow.job.WorkflowRun.result</string>
     </internalCalls>
     <sandbox>true</sandbox>
-    <iota>86</iota>
-    <head>1:86</head>
-    <done>true</done>
+    <iota>55</iota>
+    <head>1:55</head>
+    <start>2</start>
+    <done>false</done>
     <resumeBlocked>false</resumeBlocked>
-    <storageDir>workflow-completed</storageDir>
   </execution>
-  <completed>true</completed>
+  <completed>false</completed>
   <checkouts class="hudson.util.PersistedList">
     <org.jenkinsci.plugins.workflow.job.WorkflowRun_-SCMCheckout>
       <scm class="hudson.plugins.git.GitSCM" plugin="git@5.10.0">
@@ -1658,7 +1644,7 @@ pipeline {
       </scm>
       <node></node>
       <workspace>/var/jenkins_home/workspace/flask-docker-app@script/3ec5de1e94be04dc974ede976149b6812aa2919a522f1fd2bb283b4c0aa6c20c</workspace>
-      <changelogFile>/var/jenkins_home/jobs/flask-docker-app/builds/4/changelog14660143324218198750.xml</changelogFile>
+      <changelogFile>/var/jenkins_home/jobs/flask-docker-app/builds/5/changelog10418537738624848245.xml</changelogFile>
       <pollingBaseline class="hudson.scm.SCMRevisionState$None" reference="../../../actions/org.jenkinsci.plugins.workflow.steps.scm.MultiSCMRevisionState/revisionStates/entry/hudson.scm.SCMRevisionState_-None"/>
     </org.jenkinsci.plugins.workflow.job.WorkflowRun_-SCMCheckout>
     <org.jenkinsci.plugins.workflow.job.WorkflowRun_-SCMCheckout>

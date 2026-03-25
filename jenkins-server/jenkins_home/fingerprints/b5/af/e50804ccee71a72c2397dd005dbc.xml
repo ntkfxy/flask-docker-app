@@ -6,7 +6,7 @@
   <usages>
     <entry>
       <string>flask-docker-app</string>
-      <ranges>1-4</ranges>
+      <ranges>1-5</ranges>
     </entry>
   </usages>
   <facets/>

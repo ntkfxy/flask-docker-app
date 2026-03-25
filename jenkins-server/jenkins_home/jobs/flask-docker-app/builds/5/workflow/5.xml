@@ -1,0 +1,33 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<Tag plugin="workflow-support@1015.v785e5a_b_b_8b_22">
+  <node class="cps.n.StepStartNode" plugin="workflow-cps@4261.va_1fa_c7e4db_da_">
+    <parentIds>
+      <string>4</string>
+    </parentIds>
+    <id>5</id>
+    <descriptorId>org.jenkinsci.plugins.workflow.steps.EnvStep</descriptorId>
+  </node>
+  <actions>
+    <s.a.LogStorageAction/>
+    <cps.a.ArgumentsActionImpl plugin="workflow-cps@4261.va_1fa_c7e4db_da_">
+      <arguments>
+        <entry>
+          <string>overrides</string>
+          <list>
+            <string>DEV_HOST_PORT=5001</string>
+            <string>PROD_HOST_PORT=5000</string>
+            <string>DEV_APP_NAME=flask-app-dev</string>
+            <string>PROD_APP_NAME=flask-app-prod</string>
+            <string>DOCKER_REPO=natthakan1/flask-docker-app</string>
+            <string>DOCKER_HUB_CREDENTIALS_ID=final-jenkins</string>
+          </list>
+        </entry>
+      </arguments>
+      <sensitiveVariables/>
+      <isUnmodifiedBySanitization>true</isUnmodifiedBySanitization>
+    </cps.a.ArgumentsActionImpl>
+    <wf.a.TimingAction plugin="workflow-api@1398.v67030756d3fb_">
+      <startTime>1774422803478</startTime>
+    </wf.a.TimingAction>
+  </actions>
+</Tag>
