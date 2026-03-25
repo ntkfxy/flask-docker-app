@@ -43,25 +43,21 @@ pipeline {
         }
 
         // Stage 2: Install & Test (ใช้ Python container เหมือนแนวคิด Express/Node test)
-        stage('Install & Test') {
-            when { expression { params.ACTION == 'Build & Deploy' } }
-            steps {
-                echo "Running tests inside a consistent Docker environment..."
-                script {
-                    docker.image('python:3.13-slim').inside {
-                        sh '''
-                            pip install --no-cache-dir -r requirements.txt
-                            pytest -v --tb=short --junitxml=test-results.xml
-                        '''
-                    }
-                }
-            }
-            post {
-                always {
-                    junit 'test-results.xml'
-                }
-            }
+     stage('Install & Test') {
+    when { expression { params.ACTION == 'Build & Deploy' } }
+    steps {
+        echo "Running tests inside Docker container..."
+        sh '''
+            docker run --rm -v $PWD:/app -w /app python:3.13-slim \
+            sh -c "pip install --no-cache-dir -r requirements.txt && pytest -v --tb=short --junitxml=test-results.xml"
+        '''
+    }
+    post {
+        always {
+            junit 'test-results.xml'
         }
+    }
+}
 
         // Stage 3: Build & Push Docker Image (Push latest เฉพาะ main)
         stage('Build & Push Docker Image') {
@@ -86,30 +82,30 @@ pipeline {
         }
 
         // Deploy to DEV (Local Docker) — สำหรับ branch develop
-        stage('Deploy to DEV (Local Docker)') {
-            when {
-                expression { params.ACTION == 'Build & Deploy' }
-                branch 'develop'
-            }
-            steps {
-                script {
-                    def deployCmd = """
-                            echo "Deploying container ${DEV_APP_NAME} from latest image..."
-                            docker pull ${DOCKER_REPO}:${env.IMAGE_TAG}
-                            docker stop ${DEV_APP_NAME} || true
-                            docker rm ${DEV_APP_NAME} || true
-                            docker run -d --name ${DEV_APP_NAME} -p ${DEV_HOST_PORT}:5000 ${DOCKER_REPO}:${env.IMAGE_TAG}
-                            docker ps --filter name=${DEV_APP_NAME} --format "table {{.Names}}\\t{{.Image}}\\t{{.Status}}"
-                        """
-                    sh deployCmd
-                }
-            }
-            post {
-                success {
-                    sendNotificationToN8n('success', 'Deploy to DEV (Local Docker)', env.IMAGE_TAG, env.DEV_APP_NAME, env.DEV_HOST_PORT)
-                }
-            }
-        }
+        // stage('Deploy to DEV (Local Docker)') {
+        //     when {
+        //         expression { params.ACTION == 'Build & Deploy' }
+        //         branch 'develop'
+        //     }
+        //     steps {
+        //         script {
+        //             def deployCmd = """
+        //                     echo "Deploying container ${DEV_APP_NAME} from latest image..."
+        //                     docker pull ${DOCKER_REPO}:${env.IMAGE_TAG}
+        //                     docker stop ${DEV_APP_NAME} || true
+        //                     docker rm ${DEV_APP_NAME} || true
+        //                     docker run -d --name ${DEV_APP_NAME} -p ${DEV_HOST_PORT}:5000 ${DOCKER_REPO}:${env.IMAGE_TAG}
+        //                     docker ps --filter name=${DEV_APP_NAME} --format "table {{.Names}}\\t{{.Image}}\\t{{.Status}}"
+        //                 """
+        //             sh deployCmd
+        //         }
+        //     }
+        //     post {
+        //         success {
+        //             sendNotificationToN8n('success', 'Deploy to DEV (Local Docker)', env.IMAGE_TAG, env.DEV_APP_NAME, env.DEV_HOST_PORT)
+        //         }
+        //     }
+        // }
 
         // Approval ก่อน Deploy ไป PROD
         stage('Approval for Production') {

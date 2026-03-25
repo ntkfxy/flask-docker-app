@@ -1,18 +1,27 @@
+version: '3.9'
+
 services:
   app-dev:
-    # สร้าง image จาก Dockerfile (โปรเจกต์นี้ไม่มี multi-stage จึงไม่สามารถกำหนด target แบบ builder ได้)
+    # สร้าง image จาก Dockerfile ในโฟลเดอร์ปัจจุบัน
     build:
       context: .
     container_name: flask-app-dev-instance
+
+    # map port: host 5002 -> container 5000
     ports:
-      - "5002:5000" # map port สำหรับ dev (host:container)
+      - "5002:5000"
+
+    # เชื่อมโค้ดจาก host เข้า container แบบ real-time
     volumes:
-      # เชื่อมโค้ดจากเครื่องเราเข้าไปใน container แบบ Real-time เพื่อใช้ auto-reload ของ Flask
       - ./:/app
+
     environment:
-      # เปิดโหมดพัฒนาและเปิด auto-reload
+      # Flask configuration
       FLASK_APP: app.py
-      FLASK_DEBUG: "1"
-      PYTHONDONTWRITEBYTECODE: "1"
-    # ติดตั้ง dependencies ทุกครั้งที่รัน (กันเคสแก้ requirements.txt แล้วไม่ rebuild image) และสั่งรัน flask dev server
-    command: ["sh", "-c", "pip install --no-cache-dir -r requirements.txt && flask run --host=0.0.0.0 --port=5000"]
+      FLASK_DEBUG: "1"               # auto-reload
+      PYTHONDONTWRITEBYTECODE: "1"   # ไม่สร้าง .pyc
+
+    # คำสั่งรัน container
+    command: >
+      sh -c "pip install --no-cache-dir -r requirements.txt && 
+             flask run --host=0.0.0.0 --port=5000"
