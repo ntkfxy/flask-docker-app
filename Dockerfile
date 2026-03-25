@@ -15,8 +15,8 @@ COPY requirements.txt .
 COPY . .
 
 # สร้าง virtualenv และติดตั้ง dependencies
-RUN python3 -m venv /opt/venv
-ENV PATH="/opt/venv/bin:$PATH"
+RUN python3 -m venv /var/jenkins_home/venv
+ENV PATH="/var/jenkins_home/venv/bin:$PATH"
 RUN pip install --no-cache-dir -r requirements.txt
 
 # expose ports
