@@ -1,37 +1,27 @@
-# =================================================================
-# Dockerfile: jenkins-with-docker-and-python
-# - ใช้ Jenkins LTS เป็น base
-# - ติดตั้ง Docker CLI, Python 3.13 และ dependencies
-# - พร้อมรัน Flask project และ Jenkins pipeline
-# =================================================================
-
 FROM jenkins/jenkins:lts
 
-# ใช้ root ติดตั้ง docker, python, pip
 USER root
-
-# ติดตั้ง Docker CLI, Python และ pip
 RUN apt-get update && \
-    apt-get install -y docker.io python3 python3-pip git && \
+    apt-get install -y docker.io python3 python3-venv python3-pip git && \
     rm -rf /var/lib/apt/lists/*
 
-# เปลี่ยนกลับไป Jenkins user
+# กลับไป Jenkins user
 USER jenkins
 
-# สร้างโฟลเดอร์สำหรับ workspace/project
+# สร้าง workspace
 RUN mkdir -p /var/jenkins_home/workspace/flask-docker-app
-
-# กำหนด working directory สำหรับ project
 WORKDIR /var/jenkins_home/workspace/flask-docker-app
 
-# copy project ทั้งหมดเข้า container (optional, ถ้าใช้ volume จาก host แนะนำไม่ต้อง copy)
-COPY requirements.txt .
+# copy project
+COPY requirements.txt . 
 COPY . .
 
-# ติดตั้ง dependencies Python
-RUN python3 -m pip install --no-cache-dir -r requirements.txt
+# สร้าง virtualenv และติดตั้ง dependencies
+RUN python3 -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+RUN pip install --no-cache-dir -r requirements.txt
 
-# expose ports สำหรับ Jenkins และ Flask
+# expose ports
 EXPOSE 8080 50000 5000
 
 # start Jenkins
