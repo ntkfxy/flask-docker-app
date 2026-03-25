@@ -1,14 +1,20 @@
-FROM jenkins/jenkins:lts
+# ใช้ Official Python image เป็น base image
+FROM python:3.13-slim
 
-USER root
+# กำหนด Working Directory ภายใน Container
+WORKDIR /app
 
-# ติดตั้งแค่ Docker CLI เพื่อให้ Jenkins สั่งรัน Docker ได้
-# (ส่วน Python, pip ไม่ต้องลงในนี้ เพราะใน Jenkinsfile คุณใช้ docker.image('python:3.13-slim') แยกต่างหากอยู่แล้ว)
-RUN apt-get update && \
-    apt-get install -y docker.io && \
-    rm -rf /var/lib/apt/lists/*
+# Copy ไฟล์ requirements.txt เข้าไปก่อน เพื่อใช้ cache layer ของ Docker
+COPY requirements.txt .
 
-# ให้สิทธิ์ user jenkins รันคำสั่ง docker ได้
-RUN usermod -aG docker jenkins || true
+# ติดตั้ง Dependencies ที่ระบุไว้
+RUN pip install --no-cache-dir -r requirements.txt
 
-USER jenkins
+# Copy โค้ดทั้งหมดในโปรเจกต์เข้าไปใน container
+COPY . .
+
+# กำหนด Port ที่ Container จะทำงาน
+EXPOSE 5000
+
+# คำสั่งสำหรับรัน Flask Application
+CMD ["python", "app.py"]

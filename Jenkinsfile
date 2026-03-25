@@ -83,17 +83,9 @@ pipeline {
             }
         }
 
-        // Approval ก่อน Deploy ไป PROD
-        stage('Approval for Production') {
-            steps {
-                timeout(time: 1, unit: 'HOURS') {
-                    input message: "Deploy image tag '${env.IMAGE_TAG}' to PRODUCTION (Local Docker on port ${PROD_HOST_PORT})?"
-                }
-            }
-        }
-
-        // Deploy to PROD (Local Docker) — สำหรับ branch main
+        // Deploy to PRODUCTION (Local Docker)
         stage('Deploy to PRODUCTION (Local Docker)') {
+            when { expression { params.ACTION == 'Build & Deploy' } }
             steps {
                 script {
                     def deployCmd = """
@@ -105,11 +97,6 @@ pipeline {
                             docker ps --filter name=${PROD_APP_NAME} --format "table {{.Names}}\\t{{.Image}}\\t{{.Status}}"
                         """
                     sh deployCmd
-                }
-            }
-            post {
-                success {
-                    sendNotificationToN8n('success', 'Deploy to PRODUCTION (Local Docker)', env.IMAGE_TAG, env.PROD_APP_NAME, env.PROD_HOST_PORT)
                 }
             }
         }
@@ -169,25 +156,4 @@ pipeline {
             echo "Pipeline failed!"
         }
     }
-}
-
-// =================================================================
-// HELPER FUNCTION: จำลองการส่ง Notification ไปยัง n8n 
-// (ต้องอยู่นอกสุดของบล็อก pipeline)
-// =================================================================
-def sendNotificationToN8n(status, stageName, tag, appName, port) {
-    echo "========================================================="
-    echo "📣 [MOCK NOTIFICATION] ส่งข้อมูลไปยัง n8n Webhook"
-    echo "Status : ${status}"
-    echo "Stage  : ${stageName}"
-    echo "Image  : ${tag}"
-    echo "App    : ${appName} (Port: ${port})"
-    echo "========================================================="
-    
-    // หากในอนาคตมี URL ของ n8n จริงๆ สามารถใช้คำสั่ง sh ยิง cURL ตรงนี้ได้ เช่น:
-    // sh """
-    //     curl -X POST https://your-n8n-webhook-url.com/webhook/deploy-alert \\
-    //     -H "Content-Type: application/json" \\
-    //     -d '{"status":"${status}", "stage":"${stageName}", "tag":"${tag}"}'
-    // """
 }
