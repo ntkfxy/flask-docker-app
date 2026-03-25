@@ -1,0 +1,13 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<fingerprint>
+  <timestamp>2026-03-25 06:40:34.135 UTC</timestamp>
+  <md5sum>b5afe50804ccee71a72c2397dd005dbc</md5sum>
+  <fileName>Credential id=final-jenkins name=natthakan1/******</fileName>
+  <usages>
+    <entry>
+      <string>flask-docker-app</string>
+      <ranges>1-4</ranges>
+    </entry>
+  </usages>
+  <facets/>
+</fingerprint>
