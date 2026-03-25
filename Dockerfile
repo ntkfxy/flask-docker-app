@@ -1,7 +1,11 @@
 FROM jenkins/jenkins:lts
 
 USER root
-RUN apt-get update && apt-get install -y docker.io python3 python3-pip git && rm -rf /var/lib/apt/lists/*
+
+# ติดตั้ง Docker CLI, Python, pip, git และ venv
+RUN apt-get update && \
+    apt-get install -y docker.io python3 python3-pip python3-venv git && \
+    rm -rf /var/lib/apt/lists/*
 
 # กลับไป Jenkins user
 USER jenkins
@@ -10,8 +14,8 @@ USER jenkins
 RUN mkdir -p /var/jenkins_home/workspace/flask-docker-app
 WORKDIR /var/jenkins_home/workspace/flask-docker-app
 
-# copy project
-COPY requirements.txt . 
+# Copy project
+COPY requirements.txt .
 COPY . .
 
 # สร้าง virtualenv และติดตั้ง dependencies
