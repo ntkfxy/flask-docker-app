@@ -59,8 +59,8 @@ pipeline {
                     doGenerateSubmoduleConfigurations: false,
                     extensions: [],
                     userRemoteConfigs: [[
-                        url: 'https://github.com/nabnoey/final-66-53.git',
-                        credentialsId: 'final-66-53'
+                        url: 'https://github.com/ntkfxy/flask-docker-app.git',
+                        credentialsId: 'final-jenkins'
                     ]]
                 ])
             }
