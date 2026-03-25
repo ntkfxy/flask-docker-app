@@ -1,5 +1,5 @@
 // =================================================================
-// Jenkinsfile สำหรับ Flask Docker App พร้อมระบบ Deploy / Rollback
+// HELPER FUNCTION: ส่ง Notification ไปยัง n8n (ตามแนวทางของ Express Pipeline)
 // =================================================================
 
 pipeline {
@@ -15,6 +15,7 @@ pipeline {
     environment {
         DOCKER_HUB_CREDENTIALS_ID = 'final-jenkins'
         DOCKER_REPO               = "natthakan1/flask-docker-app"
+        APP_NAME                  = "flask-docker-app"
 
         // จำลอง DEV/PROD บน Local
         DEV_APP_NAME              = "flask-app-dev"
@@ -83,9 +84,17 @@ pipeline {
             }
         }
 
-        // Deploy to PRODUCTION (Local Docker)
+        // Approval ก่อน Deploy ไป PROD
+        stage('Approval for Production') {
+            steps {
+                timeout(time: 1, unit: 'HOURS') {
+                    input message: "Deploy image tag '${env.IMAGE_TAG}' to PRODUCTION (Local Docker on port ${PROD_HOST_PORT})?"
+                }
+            }
+        }
+
+        // Deploy to PROD (Local Docker) — สำหรับ branch main
         stage('Deploy to PRODUCTION (Local Docker)') {
-            when { expression { params.ACTION == 'Build & Deploy' } }
             steps {
                 script {
                     def deployCmd = """
@@ -97,6 +106,11 @@ pipeline {
                             docker ps --filter name=${PROD_APP_NAME} --format "table {{.Names}}\\t{{.Image}}\\t{{.Status}}"
                         """
                     sh deployCmd
+                }
+            }
+            post {
+                success {
+                    sendNotificationToN8n('success', 'Deploy to PRODUCTION (Local Docker)', env.IMAGE_TAG, env.PROD_APP_NAME, env.PROD_HOST_PORT)
                 }
             }
         }
@@ -152,8 +166,12 @@ pipeline {
                 cleanWs()
             }
         }
-        failure {
-            echo "Pipeline failed!"
-        }
     }
+}
+def sendNotificationToN8n(status, stageName, tag, appName, port) {
+    echo "--------------------------------------------------------"
+    echo "NOTIFICATION: ${stageName} is ${status.toUpperCase()}"
+    echo "Image: ${tag} | App: ${appName} | Port: ${port}"
+    echo "--------------------------------------------------------"
+    // ถ้าอยากให้ส่งไป n8n จริงๆ ค่อยมาใส่ curl ตรงนี้ครับ
 }
