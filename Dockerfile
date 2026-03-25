@@ -2,29 +2,13 @@ FROM jenkins/jenkins:lts
 
 USER root
 
-# ติดตั้ง Docker CLI, Python, pip, git และ venv
+# ติดตั้งแค่ Docker CLI เพื่อให้ Jenkins สั่งรัน Docker ได้
+# (ส่วน Python, pip ไม่ต้องลงในนี้ เพราะใน Jenkinsfile คุณใช้ docker.image('python:3.13-slim') แยกต่างหากอยู่แล้ว)
 RUN apt-get update && \
-    apt-get install -y docker.io python3 python3-pip python3-venv git && \
+    apt-get install -y docker.io && \
     rm -rf /var/lib/apt/lists/*
 
-# กลับไป Jenkins user
+# ให้สิทธิ์ user jenkins รันคำสั่ง docker ได้
+RUN usermod -aG docker jenkins || true
+
 USER jenkins
-
-# สร้าง workspace
-RUN mkdir -p /var/jenkins_home/workspace/flask-docker-app
-WORKDIR /var/jenkins_home/workspace/flask-docker-app
-
-# Copy project
-COPY requirements.txt .
-COPY . .
-
-# สร้าง virtualenv และติดตั้ง dependencies
-RUN python3 -m venv /var/jenkins_home/venv
-ENV PATH="/var/jenkins_home/venv/bin:$PATH"
-RUN pip install --no-cache-dir -r requirements.txt
-
-# expose ports
-EXPOSE 8080 50000 5000
-
-# start Jenkins
-CMD ["/usr/bin/tini", "--", "/usr/local/bin/jenkins.sh"]

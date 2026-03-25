@@ -1,8 +1,6 @@
 // =================================================================
-// HELPER FUNCTION: ส่ง Notification ไปยัง n8n (ตามแนวทางของ Express Pipeline)
+// Jenkinsfile สำหรับ Flask Docker App พร้อมระบบ Deploy / Rollback
 // =================================================================
-
-
 
 pipeline {
     // ใช้ agent any เพราะ build จะทำงานบน Jenkins controller/agent (Linux)
@@ -84,32 +82,6 @@ pipeline {
                 }
             }
         }
-
-        // Deploy to DEV (Local Docker) — สำหรับ branch develop
-        // stage('Deploy to DEV (Local Docker)') {
-        //     when {
-        //         expression { params.ACTION == 'Build & Deploy' }
-        //         branch 'develop'
-        //     }
-        //     steps {
-        //         script {
-        //             def deployCmd = """
-        //                     echo "Deploying container ${DEV_APP_NAME} from latest image..."
-        //                     docker pull ${DOCKER_REPO}:${env.IMAGE_TAG}
-        //                     docker stop ${DEV_APP_NAME} || true
-        //                     docker rm ${DEV_APP_NAME} || true
-        //                     docker run -d --name ${DEV_APP_NAME} -p ${DEV_HOST_PORT}:5000 ${DOCKER_REPO}:${env.IMAGE_TAG}
-        //                     docker ps --filter name=${DEV_APP_NAME} --format "table {{.Names}}\\t{{.Image}}\\t{{.Status}}"
-        //                 """
-        //             sh deployCmd
-        //         }
-        //     }
-        //     post {
-        //         success {
-        //             sendNotificationToN8n('success', 'Deploy to DEV (Local Docker)', env.IMAGE_TAG, env.DEV_APP_NAME, env.DEV_HOST_PORT)
-        //         }
-        //     }
-        // }
 
         // Approval ก่อน Deploy ไป PROD
         stage('Approval for Production') {
@@ -197,4 +169,25 @@ pipeline {
             echo "Pipeline failed!"
         }
     }
+}
+
+// =================================================================
+// HELPER FUNCTION: จำลองการส่ง Notification ไปยัง n8n 
+// (ต้องอยู่นอกสุดของบล็อก pipeline)
+// =================================================================
+def sendNotificationToN8n(status, stageName, tag, appName, port) {
+    echo "========================================================="
+    echo "📣 [MOCK NOTIFICATION] ส่งข้อมูลไปยัง n8n Webhook"
+    echo "Status : ${status}"
+    echo "Stage  : ${stageName}"
+    echo "Image  : ${tag}"
+    echo "App    : ${appName} (Port: ${port})"
+    echo "========================================================="
+    
+    // หากในอนาคตมี URL ของ n8n จริงๆ สามารถใช้คำสั่ง sh ยิง cURL ตรงนี้ได้ เช่น:
+    // sh """
+    //     curl -X POST https://your-n8n-webhook-url.com/webhook/deploy-alert \\
+    //     -H "Content-Type: application/json" \\
+    //     -d '{"status":"${status}", "stage":"${stageName}", "tag":"${tag}"}'
+    // """
 }
