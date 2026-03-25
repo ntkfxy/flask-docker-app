@@ -43,21 +43,25 @@ pipeline {
         }
 
         // Stage 2: Install & Test (ใช้ Python container เหมือนแนวคิด Express/Node test)
-     stage('Install & Test') {
-    when { expression { params.ACTION == 'Build & Deploy' } }
-    steps {
-        echo "Running tests inside Docker container..."
-        sh '''
-            docker run --rm -v $PWD:/app -w /app python:3.13-slim \
-            sh -c "pip install --no-cache-dir -r requirements.txt && pytest -v --tb=short --junitxml=test-results.xml"
-        '''
-    }
-    post {
-        always {
-            junit 'test-results.xml'
+        stage('Install & Test') {
+            when { expression { params.ACTION == 'Build & Deploy' } }
+            steps {
+                echo "Running tests inside a consistent Docker environment..."
+                script {
+                    docker.image('python:3.13-slim').inside {
+                        sh '''
+                            pip install --no-cache-dir -r requirements.txt
+                            pytest -v --tb=short --junitxml=test-results.xml
+                        '''
+                    }
+                }
+            }
+            post {
+                always {
+                    junit 'test-results.xml'
+                }
+            }
         }
-    }
-}
 
         // Stage 3: Build & Push Docker Image (Push latest เฉพาะ main)
         stage('Build & Push Docker Image') {
@@ -109,10 +113,6 @@ pipeline {
 
         // Approval ก่อน Deploy ไป PROD
         stage('Approval for Production') {
-            when {
-                expression { params.ACTION == 'Build & Deploy' }
-                branch 'main'
-            }
             steps {
                 timeout(time: 1, unit: 'HOURS') {
                     input message: "Deploy image tag '${env.IMAGE_TAG}' to PRODUCTION (Local Docker on port ${PROD_HOST_PORT})?"
@@ -122,10 +122,6 @@ pipeline {
 
         // Deploy to PROD (Local Docker) — สำหรับ branch main
         stage('Deploy to PRODUCTION (Local Docker)') {
-            when {
-                expression { params.ACTION == 'Build & Deploy' }
-                branch 'main'
-            }
             steps {
                 script {
                     def deployCmd = """
