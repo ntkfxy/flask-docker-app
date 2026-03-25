@@ -1,9 +1,7 @@
 FROM jenkins/jenkins:lts
 
 USER root
-RUN apt-get update && \
-    apt-get install -y docker.io python3 python3-venv python3-pip git && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y docker.io python3 python3-pip git && rm -rf /var/lib/apt/lists/*
 
 # กลับไป Jenkins user
 USER jenkins
