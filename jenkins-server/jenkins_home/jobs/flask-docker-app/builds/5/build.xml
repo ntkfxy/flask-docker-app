@@ -1317,19 +1317,33 @@
       </env>
     </org.jenkinsci.plugins.workflow.cps.EnvActionImpl>
     <org.jenkinsci.plugins.workflow.support.steps.input.InputAction plugin="pipeline-input-step@540.v14b_100d754dd">
-      <ids class="java.util.concurrent.CopyOnWriteArrayList">
-        <string>D9a2ab12645422f7824143b1393ae605</string>
-      </ids>
+      <ids class="java.util.concurrent.CopyOnWriteArrayList"/>
     </org.jenkinsci.plugins.workflow.support.steps.input.InputAction>
+    <jenkins.model.InterruptedBuildAction>
+      <causes>
+        <jenkins.model.CauseOfInterruption_-UserInterruption>
+          <user>ntk</user>
+        </jenkins.model.CauseOfInterruption_-UserInterruption>
+      </causes>
+    </jenkins.model.InterruptedBuildAction>
+    <jenkins.metrics.impl.SubTaskTimeInQueueAction plugin="metrics@4.2.37-494.v06f9a_939d33a_">
+      <queuingDurationMillis>24</queuingDurationMillis>
+      <blockedDurationMillis>0</blockedDurationMillis>
+      <buildableDurationMillis>19</buildableDurationMillis>
+      <waitingDurationMillis>2</waitingDurationMillis>
+      <executingDurationMillis>370589</executingDurationMillis>
+      <workUnitCount>1</workUnitCount>
+    </jenkins.metrics.impl.SubTaskTimeInQueueAction>
   </actions>
-  <queueId>13</queueId>
+  <queueId>15</queueId>
   <timestamp>1774422753465</timestamp>
   <startTime>1774422753489</startTime>
-  <duration>0</duration>
+  <result>ABORTED</result>
+  <duration>1007793</duration>
   <charset>UTF-8</charset>
   <keepLog>false</keepLog>
   <execution class="org.jenkinsci.plugins.workflow.cps.CpsFlowExecution">
-    <result>SUCCESS</result>
+    <result>ABORTED</result>
     <script>// =================================================================
 // JENKINS PIPELINE: Flask Docker CI/CD
 // =================================================================
@@ -1579,32 +1593,31 @@ pipeline {
     }
 }</script>
     <loadedScripts class="linked-hash-map"/>
-    <persistedClean>true</persistedClean>
     <durabilityHint>MAX_SURVIVABILITY</durabilityHint>
     <timings class="map">
       <entry>
         <string>flowNode</string>
-        <long>1139570594</long>
+        <long>2036405998</long>
       </entry>
       <entry>
         <string>classLoad</string>
-        <long>3107298004</long>
+        <long>6415682443</long>
       </entry>
       <entry>
         <string>runQueue</string>
-        <long>11596101714</long>
+        <long>21639092763</long>
       </entry>
       <entry>
         <string>run</string>
-        <long>6555266955</long>
+        <long>11915045169</long>
       </entry>
       <entry>
         <string>parse</string>
-        <long>395945210</long>
+        <long>4405428834</long>
       </entry>
       <entry>
         <string>saveProgram</string>
-        <long>4000212521</long>
+        <long>7151263785</long>
       </entry>
     </timings>
     <internalCalls class="sorted-set">
@@ -1613,16 +1626,17 @@ pipeline {
       <string>hudson.plugins.git.GitSCM.branches</string>
       <string>org.jenkinsci.plugins.docker.commons.credentials.DockerRegistryEndpoint.&lt;init&gt;</string>
       <string>org.jenkinsci.plugins.docker.commons.credentials.DockerRegistryEndpoint.imageName</string>
+      <string>org.jenkinsci.plugins.pipeline.StageStatus.TAG_NAME</string>
       <string>org.jenkinsci.plugins.workflow.job.WorkflowRun.result</string>
     </internalCalls>
     <sandbox>true</sandbox>
-    <iota>55</iota>
-    <head>1:55</head>
-    <start>2</start>
-    <done>false</done>
+    <iota>86</iota>
+    <head>1:86</head>
+    <done>true</done>
     <resumeBlocked>false</resumeBlocked>
+    <storageDir>workflow-completed</storageDir>
   </execution>
-  <completed>false</completed>
+  <completed>true</completed>
   <checkouts class="hudson.util.PersistedList">
     <org.jenkinsci.plugins.workflow.job.WorkflowRun_-SCMCheckout>
       <scm class="hudson.plugins.git.GitSCM" plugin="git@5.10.0">

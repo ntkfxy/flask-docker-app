@@ -23,26 +23,33 @@
         <hudson.model.ChoiceParameterDefinition>
           <name>ACTION</name>
           <description>เลือก Action ที่ต้องการ</description>
-          <choices>
-            <string>Build &amp; Deploy</string>
-            <string>Rollback</string>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>Build &amp; Deploy</string>
+              <string>Rollback</string>
+            </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>ROLLBACK_TAG</name>
-          <description>ใส่ Image Tag สำหรับ Rollback</description>
+          <description>สำหรับ Rollback: ใส่ Image Tag (เช่น Git Hash หรือ dev-123)</description>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
         <hudson.model.ChoiceParameterDefinition>
           <name>ROLLBACK_TARGET</name>
-          <description>เลือก Environment สำหรับ Rollback</description>
-          <choices>
-            <string>dev</string>
-            <string>prod</string>
+          <description>สำหรับ Rollback: เลือก Environment</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>dev</string>
+              <string>prod</string>
+            </a>
           </choices>
         </hudson.model.ChoiceParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
+    <org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+      <triggers/>
+    </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
   </properties>
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition" plugin="workflow-cps@4261.va_1fa_c7e4db_da_">
     <scm class="hudson.plugins.git.GitSCM" plugin="git@5.10.0">
@@ -50,7 +57,6 @@
       <userRemoteConfigs>
         <hudson.plugins.git.UserRemoteConfig>
           <url>https://github.com/ntkfxy/flask-docker-app.git</url>
-          <credentialsId>final-jenkins</credentialsId>
         </hudson.plugins.git.UserRemoteConfig>
       </userRemoteConfigs>
       <branches>

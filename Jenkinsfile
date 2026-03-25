@@ -41,14 +41,18 @@ pipeline {
         }
 
         // Stage 2: Install & Test (ใช้ Python container เหมือนแนวคิด Express/Node test)
-stage('Install & Test') {
+// Stage 2: Install & Test
+        stage('Install & Test') {
             when { expression { params.ACTION == 'Build & Deploy' } }
             steps {
                 echo "Running tests inside a consistent Docker environment..."
                 script {
-                    docker.image('python:3.13-slim').inside {
+                    // เพิ่ม --network host เพื่อให้ container ออกเน็ตได้
+                    docker.image('python:3.13-slim').inside('--network host') {
                         sh '''
                             pip install --no-cache-dir -r requirements.txt
+                            # ตรวจสอบว่ามี pytest หรือไม่ ถ้าไม่มีให้ติดตั้งเพิ่มชั่วคราว
+                            pip install pytest
                             pytest -v --tb=short --junitxml=test-results.xml
                         '''
                     }
@@ -56,7 +60,14 @@ stage('Install & Test') {
             }
             post {
                 always {
-                    junit 'test-results.xml'
+                    // ป้องกัน Error ถ้าไฟล์ test-results.xml ไม่ถูกสร้าง
+                    script {
+                        if (fileExists('test-results.xml')) {
+                            junit 'test-results.xml'
+                        } else {
+                            echo "Warning: test-results.xml not found. Skipping JUnit archiving."
+                        }
+                    }
                 }
             }
         }
